@@ -1,13 +1,19 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  redis:
-    image: redis:7
-    container_name: balancer-container
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
-volumes:
-  redis_data:
+
+    php:
+        image: php:8.4-cli
+        container_name: balancer_php
+        volumes:
+            - .:/app
+        working_dir: /app
+        command: php -S 0.0.0.0:8000 -t public
+        ports:
+            - "8000:8000"
+
+    redis:
+        image: redis:7
+        container_name: balancer_redis
+        ports:
+            - "6379:6379"
